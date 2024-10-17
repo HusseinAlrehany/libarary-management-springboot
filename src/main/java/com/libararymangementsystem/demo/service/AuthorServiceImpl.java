@@ -7,6 +7,7 @@ import com.libararymangementsystem.demo.dtos.BookDTO;
 import com.libararymangementsystem.demo.dtos.BookWithAuthorDetailsDTO;
 import com.libararymangementsystem.demo.entity.Author;
 import com.libararymangementsystem.demo.entity.Book;
+import com.libararymangementsystem.demo.exceptionhandling.AlreadyExistsException;
 import com.libararymangementsystem.demo.exceptionhandling.NotFoundException;
 import com.libararymangementsystem.demo.repository.AuthorRepository;
 import com.libararymangementsystem.demo.repository.BookRepository;
@@ -60,7 +61,7 @@ public class AuthorServiceImpl implements AuthorService{
              Author author=modelMapper.map(authorDTO,Author.class);
              Author result=authorRepository.findByEmail(author.getEmail());
              if(result!=null){
-                 throw new NotFoundException("Email is Already taken -> " + author.getEmail());
+                 throw new AlreadyExistsException("Email is Already taken -> " + author.getEmail());
              }
              author.setId(0);
              author=authorRepository.save(author);
@@ -108,14 +109,15 @@ public class AuthorServiceImpl implements AuthorService{
     @Override
     public void updateAuthor(AuthorDTO authorDTO) {
         Author author=modelMapper.map(authorDTO,Author.class);
-        Optional<Author> result=authorRepository.findById(author.getId());
+        Optional<Author> result=authorRepository.findById(authorDTO.getId());
+        Author dbAuthor=authorRepository.findByEmail(authorDTO.getEmail());
         if(result.isEmpty()){
             throw new NotFoundException("Author Not Found Id ->> " + author.getId() );
         }
         authorRepository.save(author);
 
 
-       /* Author dbAuthor=authorRepository.findByEmail(author.getEmail());
+       /* Author dbAuthor=authorRepository.findByEmail(authorDTO.getEmail());
         if(dbAuthor!=null){
             dbAuthor.setFirstName(author.getFirstName());
             dbAuthor.setLastName(author.getLastName());

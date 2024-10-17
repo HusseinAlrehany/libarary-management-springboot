@@ -19,7 +19,6 @@ public class Author {
     private String lastName;
 
    @Column(name = "email")
-
     private String email;
    @OneToMany(mappedBy = "author" , cascade ={CascadeType.DETACH,CascadeType.MERGE,
                                                CascadeType.PERSIST,CascadeType.REFRESH})

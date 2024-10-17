@@ -24,6 +24,14 @@ public class ExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<Object>(new Response(exc.getMessage(),HttpStatus.NOT_FOUND, LocalDateTime.now()),HttpStatus.NOT_FOUND);
     }
 
+    @org.springframework.web.bind.annotation.ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<Object> alreadyExistsExceptionHandler(AlreadyExistsException exc,WebRequest request){
+
+
+
+        return new ResponseEntity<Object>(new Response(exc.getMessage(),HttpStatus.CONFLICT, LocalDateTime.now()),HttpStatus.NOT_FOUND);
+    }
+
     //TO HANDLE OTHER TYPES OF EXCEPTIONS
     @org.springframework.web.bind.annotation.ExceptionHandler(Exception.class)
     public ResponseEntity<Object> genericExceptionHandling(Exception exc,WebRequest request){
